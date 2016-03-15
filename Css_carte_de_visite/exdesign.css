@@ -1,0 +1,199 @@
+/*
+	card developper framework
+		Default: ex_container, ex_front, ex_back;
+		color class: ex_red, ex_green, ex_blue, ex_yellow, ex_sky, ex_orange, ex_cadet, ex_teal;
+		typographie class: ex_tiny, ex_small, ex_medium, ex_large, ex_xlarge, ex_xxlarge, ex_xxxlarge, ex_big;
+		background class: ex_bg_sm, ex_bg_md, ex_bg_scircle, ex_bg_lcircle, ex_bg_diagst, ex_bg_diagpt, ex_bg_rpaper, ex_bg_triangle, ex_bg_crossline
+
+*/
+
+
+/*Default*/
+.ex_container{
+	max-width: 50rem;
+	width: 100%;
+	margin: 5rem auto;
+	text-align: center;
+}
+
+.ex_front, .ex_back{
+	overflow: hidden;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	box-shadow: rgba(0, 0, 0, 0.2) 0 0 3rem 0,
+	rgba(0, 0, 0, 0.1) 0 0 1rem 0;
+}
+
+/*Couleur*/
+.ex_teal{
+	background-color: #009688 !important;
+	color: #fff;
+}
+.ex_cadet{
+	background-color: #607D8B !important;
+	color: #fff;
+}
+.ex_orange{
+	background-color: #FF9800 !important;
+	color: #fff;
+}
+.ex_red{
+	background-color: #C9302C !important;
+	color: #fff;
+}
+.ex_yellow{
+	background-color: #EC971F !important;
+	color: #fff;
+}
+.ex_sky{
+	background-color: #31B0D5 !important;
+	color: #fff;
+}
+.ex_green{
+	background-color: #449D44 !important;
+	color: #fff;
+}
+.ex_blue{
+	background-color: #286090 !important;
+	color: #fff;
+}
+
+/* Typographie */
+.ex_tiny{
+	font-size: 10px !important;
+}
+.ex_small{
+	font-size: 12px !important;
+}
+.ex_medium{
+	font-size: 15px !important;
+}
+.ex_large{
+	font-size: 18px !important;
+}
+.ex_xlarge{
+	font-size: 24px !important;
+}
+.ex_xxlarge{
+	font-size: 36px !important;
+}
+.ex_xxxlarge{
+	font-size: 48px !important;
+}
+.ex_big{
+	font-size: 72px !important;
+}
+
+/*arriere plan*/
+.ex_bg_sm{background-size: 10px 10px;}
+.ex_bg_md{background-size: 12px 12px;}
+
+.ex_bg_scircle{
+	background-color: #2c2c2c;
+	background-image: -webkit-repeating-radial-gradient(
+		circle,
+		#3a3a3a, #3a3a3a 45%,
+		transparent 45%, transparent 60%,
+		#3a3a3a 60%, #3a3a3a 100%
+		);
+	background-image: repeating-radial-gradient(
+		circle,
+		#3a3a3a, #3a3a3a 45%,
+		transparent 45%, transparent 60%,
+		#3a3a3a 60%, #3a3a3a 100%
+		);
+}
+
+.ex_bg_triangle{
+  border-color: #EEE8D0;
+  background-image: -webkit-repeating-linear-gradient(
+    135deg,
+    transparent, transparent 50%,
+    #f0ecdb 50%, #f0ecdb
+    );
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent, transparent 50%,
+    #f0ecdb 50%, #f0ecdb
+    );
+  background-size: 20px 20px;
+}
+
+.ex_bg_diagst{
+  background-color: #161616;
+  background-image: -webkit-repeating-linear-gradient(
+    315deg,
+    #333, #333 25%,
+    transparent 25%, transparent 50%
+    );
+  background-image: repeating-linear-gradient(
+    135deg,
+    #333, #333 25%,
+    transparent 25%, transparent 50%
+    );
+  background-size: 12px 12px;
+}
+
+.ex_bg_diagpt{
+  background-color: #161616;
+  background-image: -webkit-repeating-linear-gradient(
+    315deg,
+    #333, #333 10%,
+    transparent 10%, transparent 50%
+    );
+  background-image: repeating-linear-gradient(
+    135deg,
+    #333, #333 10%,
+    transparent 10%, transparent 50%
+    );
+  background-size: 12px 12px;
+}
+.ex_bg_lcircle{
+  background-color: #2c3e50;
+  background-image: -webkit-repeating-radial-gradient(
+    circle,
+    #34495e, #34495e 45%,
+    transparent 45%, transparent 60%,
+    #34495e 60%, #34495e 100%
+    );
+  background-image: repeating-radial-gradient(
+    circle,
+    #34495e, #34495e 45%,
+    transparent 45%, transparent 60%,
+    #34495e 60%, #34495e 100%
+    );
+	}
+.ex_bg_rpaper{
+  .background-color: #e4d4bb;
+  background-image: -webkit-repeating-radial-gradient(
+    circle,
+    #e4d4bb, #e7dac6 50%, #e7dac6 100%
+    );
+  background-image: repeating-radial-gradient(
+    circle,
+    #e4d4bb, #e7dac6 50%, #e7dac6 100%
+    );
+	}
+.ex_bg_crossline{
+  background-color: #161616;
+  background-image: -webkit-repeating-linear-gradient(
+    315deg,
+    #333, #333 10%,
+    transparent 10%, transparent 50%
+    ),-webkit-repeating-linear-gradient(
+      225deg,
+      #333, #333 10%,
+      transparent 10%, transparent 50%
+      );
+  background-image: repeating-linear-gradient(
+    135deg,
+    #333, #333 10%,
+    transparent 10%, transparent 50%
+    ),repeating-linear-gradient(
+      -135deg,
+      #333, #333 10%,
+      transparent 10%, transparent 50%
+      );
+	}
+/*fin arriere plan*/

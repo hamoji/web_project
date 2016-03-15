@@ -1,0 +1,190 @@
+*{
+  box-sizing: border-box;
+}
+
+body{
+  font-family: "roboto";
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(#5eafe7, #257bb7);
+  color: #fff;
+}
+h1{
+  font-weight: 400;
+  line-height: 1.618em;
+}
+p{
+  font-weight: 300;
+  line-height: 1.618em;
+}
+a{
+  text-decoration: none;
+}
+.slide{
+  width: 100%;
+  height: 100%;
+}
+.content{
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2vw;
+  animation-fill-mode: both;
+}
+#one .content{
+  opacity: 1;
+}
+
+
+.next::after,.prev::after{
+  font-family: "FontAwesome";
+}
+.next::after{
+  content: "\f0a9";
+}
+
+.prev::after{
+  content: "\f0a8";
+}
+.navigation{
+  position: absolute;
+  z-index: 5;
+  bottom: 3vw;
+  right: 3vw;
+  font-size: 4vw;
+}
+.next,.prev{
+  color: #7dbeeb;
+}
+.prev{
+  margin-right: 0.3em;
+}
+.disabled{
+  color: #0a629f;
+}
+.navigation{
+  display: none;
+}
+#one .navigation{
+  display: block;
+}
+
+.slideswitch:target ~ .slide .navigation{
+  display: none !important;
+}
+.slideswitch:target ~ .slide#one .content,
+.slideswitch:target ~ .slide#two .content,
+.slideswitch:target ~ .slide#three .content,
+.slideswitch:target ~ .slide#four .content,
+.slideswitch:target ~ .slide#five .content{
+  opacity: 0;
+}
+.slideswitch[id="one"]:target ~ .slide#one .navigation,
+.slideswitch[id="two"]:target ~ .slide#two .navigation,
+.slideswitch[id="three"]:target ~ .slide#three .navigation,
+.slideswitch[id="four"]:target ~ .slide#four .navigation,
+.slideswitch[id="five"]:target ~ .slide#five .navigation{
+  display: block !important;
+}
+.slideswitch[id="one"]:target ~ .slide#one .content,
+.slideswitch[id="two"]:target ~ .slide#two .content,
+.slideswitch[id="three"]:target ~ .slide#three .content,
+.slideswitch[id="four"]:target ~ .slide#four .content,
+.slideswitch[id="five"]:target ~ .slide#five .content{
+  animation-name: fade_in;
+  animation-duration: 0.5s;
+}
+.slideswitch[id="one"]:target ~ .slide#one .slide_from_left,
+.slideswitch[id="two"]:target ~ .slide#two .slide_from_left,
+.slideswitch[id="three"]:target ~ .slide#three .slide_from_left,
+.slideswitch[id="four"]:target ~ .slide#four .slide_from_left,
+.slideswitch[id="five"]:target ~ .slide#five .slide_from_left{
+  animation: slide_from_left !important;
+  animation-duration: 0.5s;
+}
+.slideswitch[id="one"]:target ~ .slide#one .flip,
+.slideswitch[id="two"]:target ~ .slide#two .flip,
+.slideswitch[id="three"]:target ~ .slide#three .flip,
+.slideswitch[id="four"]:target ~ .slide#four .flip,
+.slideswitch[id="five"]:target ~ .slide#five .flip{
+  animation-name: flip !important;
+  animation-duration: 0.5s;
+  backface-visibility: hidden;
+}
+.slideswitch[id="one"]:target ~ .slide#one .grow,
+.slideswitch[id="two"]:target ~ .slide#two .grow,
+.slideswitch[id="three"]:target ~ .slide#three .grow,
+.slideswitch[id="four"]:target ~ .slide#four .grow,
+.slideswitch[id="five"]:target ~ .slide#five .grow{
+  animation-name: grow !important;
+  animation-duration: 0.5s;
+}
+
+#one .content h1,#one .content p{
+  background: rgba(14, 108, 173, 0.8);
+  color: #fff;
+  width: 100vw;
+  padding: 1em 0.5em;
+  border-left: 4vw solid rgba(10, 98, 159, 0.5);
+  border-right: 4vw solid rgba(10, 98, 159, 0.5);
+}
+#two .content{
+  background: url("../fox.jpg");
+  background-size: cover;
+  align-items: flex-start;
+}
+#two .content h1, #two .content p{
+  background: rgba(0, 0, 0, 0.75);
+  padding: 0.5rem 1rem;
+}
+img.stretch{
+  width: auto;
+  height: 60%;
+}
+#three .content{
+  background-color: white;
+}
+#four .content::befor{
+  z-index: -1;
+  content: '';
+  position: absolute;
+  top: calc(50% - 45vh);
+  left: calc(50% - 45vh);
+  height: 90vh;
+  width: 90vh;
+  background: #1b6ea8;
+  border-radius: 50%;
+}
+#five .logo{
+  width: 50vh;
+  height: 50vh;
+  background: #fff;
+  border: 5px solid #7dbeeb;
+}
+/*keyframes animation */
+@keyframes fade_in{
+  from{opacity: 0}
+  to{opacity: 1;}
+}
+@keyframes flip{
+  0%{ opacity: 0; transform: rotateY(180deg) translateX(0);}
+  100%{opacity: 1; transform: rotateY(0deg) translateX(0);}
+}
+@keyframes slide_from_left{
+  from{ opacity: 0; transform: translateX(100);}
+  to{opacity: 1; transform: translateX(0);}
+}
+@keyframes grow{
+  0%{opacity: 0; transform: scale(0,0);}
+  100%{opacity: 1; transform: scale(1,1);}
+}

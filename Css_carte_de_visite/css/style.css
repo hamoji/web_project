@@ -1,0 +1,210 @@
+/*
+	color class: ex_red, ex_green, ex_blue, ex_yellow, ex_sky, ex_orange, ex_cadet, ex_teal;
+	typographie class: ex_tiny, ex_small, ex_medium, ex_large, ex_xlarge, ex_xxlarge, ex_xxxlarge, ex_big;
+
+*/
+
+*{
+	box-sizing: border-box;
+}
+
+body{
+	font-family: "Open Sans";
+	line-height: 1.618em
+	color: #444;
+	background-color: #2c2c2c;
+	/*image d'arriere plan (petit cercle)*/
+	background-image: repeating-radial-gradient(
+		circle,
+		#3a3a3a, #3a3a3a 45%,
+		transparent 45%, transparent 60%,
+		#3a3a3a 60%, #3a3a3a 100%
+		);
+		background-size: 10px 10px;
+}
+
+a{
+text-decoration: none;
+}
+
+.wrapper{
+	max-width: 50rem;
+	width: 100%;
+	margin: 5rem auto;
+	text-align: center;
+}
+
+#flip{
+	display: none;
+}
+
+.card{
+	padding: 0;
+	display: block;
+	width: 32rem;
+	height: 20rem;
+	margin: 0 auto;
+	transform-style: preserve-3d;
+}
+
+.front, .back{
+	overflow: hidden;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	box-shadow: rgba(0, 0, 0, 0.2) 0 0 3rem 0,
+	rgba(0, 0, 0, 0.1) 0 0 1rem 0;
+}
+.front{
+	transform: translateZ(2px);
+	background: #2d5077;
+	border-radius:  2rem 0;
+	color: #cddbea;
+}
+
+/*rotation avant-arriere de la carte*/
+#flip:not(:checked) + label > .card{
+	transform: rotateY(0deg);
+	transition: transform 0.25s;
+}
+#flip:checked + label > .card{
+	transform: rotateY(180deg);
+	transition: transform 0.25s;
+}/**/
+
+
+.back{
+	border-radius: 0 2rem;
+	transform: translateZ(-2px) rotateY(180deg);
+	background: #fff;
+	border: 1px solid #2d5077;
+	padding-top: 1.7rem;
+}
+
+/*arriere plan avant*/
+.front_bg{
+	position: absolute;
+	left:-2.7rem;
+	top: 0rem;
+	font-weight: 800;
+	font-style: italic;
+	font-size: 30rem;
+	line-height: 20rem;
+	letter-spacing: -0.09em;
+	color: rgba(255, 255, 255, 0.04);
+}/**/
+
+/*zone model des noms*/
+.name{
+	position: absolute;
+	top: 8rem;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font-size: 3rem;
+	font-weight: 100;
+}
+.name span{font-weight: 800}
+/*Fin zone model des noms*/
+
+/*zone model des professions*/
+.profession{
+	position: absolute;
+	top:11rem;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font-size: 1.5rem;
+	font-weight: 300;
+}
+
+
+.strip{
+	position: absolute;
+	top: 6rem;
+	bottom: 6rem;
+	left: 0;
+	right: 0;
+	background: #2d5077;
+}
+.left_side, .right_side{
+	position: absolute;
+	top:7rem;
+	bottom: 7rem;
+	width: 0.25rem;
+	background: #3a5c81;
+}
+.left_side{left: 4.5rem;}
+.right_side{right: 4.5rem}
+
+
+/*arriere*/
+.left_back{
+	background: #2d5077;
+	position: absolute;
+	top: 0;
+	left: -1rem;
+	bottom: 0;
+	width: 9.5rem;
+}
+/**/
+.item{
+	position: relative;
+	margin-left: 3.5em;
+	text-align: left;
+	font-size: 1.65rem;
+	font-weight: 700;
+	line-height: 2em;
+	z-index:1;
+}
+.item a{
+	color: #2d5077;
+	transition: color 0.35s;
+}
+.item:hover .glyphicon{
+	color: #fff;
+	transition: color 0.35s;
+}
+.glyphicon{
+	width: 2em;
+	color: #cddbea;
+	margin-right: 2em;
+	/*text-align: center;*/
+	transition: color 0.35s;
+}
+
+.item::before{
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	bottom: 0;
+	background: #2d5077;
+	z-index: -1;
+	transition: width 0.35s;
+}
+.item:hover::before{
+	width: 30rem;
+	transition: width 0.35s;
+}
+.item::after{
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	right: 23.35rem;
+	bottom: 0;
+	background: #34587f;
+	z-index: -1;
+	transition: width 0.35s;
+}
+.item:hover::after{
+	width: 9rem;
+	transition: width 0.35s;
+}
+.item:hover a {
+	color: #cddbea;
+	transition: color 0.35s;
+}

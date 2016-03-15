@@ -1,0 +1,960 @@
+<html><head><title>NSE Scripts</title><link rel="stylesheet" href="/css/insecdb.css" type="text/css"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="start" href="toc.html" title="Nmap Network Scanning"><link rel="up" href="nse.html" title="Chapter 9. Nmap Scripting Engine"><link rel="prev" href="nse-library.html" title="Lua Extensions"><link rel="next" href="nse-api.html" title="Nmap API"><link rel="preface" href="preface.html" title="Preface"><link rel="chapter" href="intro.html" title="Chapter 1. Getting Started with Nmap"><link rel="chapter" href="install.html" title="Chapter 2. Obtaining, Compiling, Installing, and Removing Nmap"><link rel="chapter" href="host-discovery.html" title="Chapter 3. Host Discovery (Ping Scanning)"><link rel="chapter" href="port-scanning.html" title="Chapter 4. Port Scanning Overview"><link rel="chapter" href="scan-methods.html" title="Chapter 5. Port Scanning Techniques and Algorithms"><link rel="chapter" href="performance.html" title="Chapter 6. Optimizing Nmap Performance"><link rel="chapter" href="vscan.html" title="Chapter 7. Service and Application Version Detection"><link rel="chapter" href="osdetect.html" title="Chapter 8. Remote OS Detection"><link rel="chapter" href="nse.html" title="Chapter 9. Nmap Scripting Engine"><link rel="chapter" href="firewalls.html" title="Chapter 10. Detecting and Subverting Firewalls and Intrusion Detection Systems"><link rel="chapter" href="defenses.html" title="Chapter 11. Defenses Against Nmap"><link rel="chapter" href="zenmap.html" title="Chapter 12. Zenmap GUI Users' Guide"><link rel="chapter" href="output.html" title="Chapter 13. Nmap Output Formats"><link rel="chapter" href="data-files.html" title="Chapter 14. Understanding and Customizing Nmap Data Files"><link rel="chapter" href="man.html" title="Chapter 15. Nmap Reference Guide"><link rel="appendix" href="app-nmap-dtd.html" title="Appendix A. Nmap XML Output DTD"><link rel="index" href="idx.html" title="Index"><link REL="SHORTCUT ICON" HREF="/shared/images/tiny-eyeicon.png" TYPE="image/png">
+<META NAME="ROBOTS" CONTENT="NOARCHIVE">
+<link rel="stylesheet" href="/shared/css/insecdb.css" type="text/css">
+<!--Google Analytics Code-->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-11009417-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<!--END Google Analytics Code-->
+
+<!--Google Custom Site Search boilerplate Javascript-->
+<script type="text/javascript">
+  (function() {
+    var cx = 'partner-pub-0078565546631069:bx60rb-fytx';
+    var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<!--End Google Custom Site Search boilerplate Javascript-->
+
+</HEAD>
+<BODY BGCOLOR="#2A0D45" TEXT="#000000">
+
+<TABLE CELLPADDING="0" WIDTH="100%" CELLSPACING="0">
+<TR><TD ALIGN="left"><A HREF="/"><IMG BORDER=0 ALT="Home page logo"
+SRC="/images/sitelogo.png" HEIGHT=90 WIDTH=168></A></TD>
+<TD VALIGN="bottom" ALIGN="right">
+<!-- Begin TopBanner Code -->
+<!-- AdSpeed.com Serving Code 7.9.6 for [Zone] TopBanner [Any Dimension] -->
+<script type="text/javascript" src="//g.adspeed.net/ad.php?do=js&amp;zid=14678&amp;wd=-1&amp;ht=-1&amp;target=_blank"></script>
+<!-- AdSpeed.com End -->
+<!-- End Banner Code -->
+
+</TD></TR></TABLE>
+<TABLE WIDTH="100%" CELLPADDING="0" CELLSPACING="0"><TR>
+<TD ALIGN="left" WIDTH="130" VALIGN="top" class="sidebar">
+
+<!-- SECWIKI PORTAL INSERT -->
+
+<ul>
+<li><a href="//nmap.org/">Nmap Security Scanner</a>
+<ul>
+<li><a href="//nmap.org/">Intro</a></li>
+<li><a href="//nmap.org/book/man.html">Ref Guide</a></li>
+<li><a href="//nmap.org/book/install.html">Install Guide</a></li>
+<li><a href="https://nmap.org/download.html">Download</a></li>
+<li><a href="//nmap.org/changelog.html">Changelog</a></li>
+<li><a href="//nmap.org/book/">Book</a></li>
+<li><a href="//nmap.org/docs.html">Docs</a></li>
+</ul>
+<li><a href="http://seclists.org/">Security Lists</a>
+<ul>
+<li><a href="http://seclists.org/nmap-announce/">Nmap Announce</a></li>
+<li><a href="http://seclists.org/nmap-dev/">Nmap Dev</a></li>
+<li><a href="http://seclists.org/bugtraq/">Bugtraq</a></li>
+<li><a href="http://seclists.org/fulldisclosure/">Full Disclosure</a></li>
+<li><a href="http://seclists.org/pen-test/">Pen Test</a></li>
+<li><a href="http://seclists.org/basics/">Basics</a></li>
+<li><a href="http://seclists.org/">More</a></li>
+</ul>
+<li><a href="http://sectools.org">Security Tools</a>
+<ul>
+<li><a href="http://sectools.org/tag/pass-audit/">Password audit</a></li>
+<li><a href="http://sectools.org/tag/sniffers/">Sniffers</a></li>
+<li><a href="http://sectools.org/tag/vuln-scanners/">Vuln scanners</a></li>
+<li><a href="http://sectools.org/tag/web-scanners/">Web scanners</a></li>
+<li><a href="http://sectools.org/tag/wireless/">Wireless</a></li>
+<li><a href="http://sectools.org/tag/sploits/">Exploitation</a></li>
+<li><a href="http://sectools.org/tag/packet-crafters/">Packet crafters</a></li>
+<li><a href="http://sectools.org/">More</a></li>
+</ul>
+<li><a href="http://insecure.org/">Site News</a></li>
+<li><a href="http://insecure.org/advertising.html">Advertising</a></li>
+<li><a href="http://insecure.org/fyodor/">About/Contact</a></li>
+<li>
+<!-- SiteSearch Google -->
+<form action="https://nmap.org/search.html" id="cse-search-box-sidebar">
+  <div>
+    <input type="hidden" name="cx" value="partner-pub-0078565546631069:bx60rb-fytx">
+    <input type="hidden" name="cof" value="FORID:9">
+    <input type="hidden" name="ie" value="ISO-8859-1">
+    <input type="text" name="q" size="16">
+    <input type="submit" name="sa" value="Site Search">
+  </div>
+</form>
+<!-- End SiteSearch Google -->
+</li>
+<!-- These can come back if I ever update them ...
+<li><a href="http://insecure.org/links.html">Exceptional Links</a></li>
+<li><a href="http://insecure.org/reading.html">Good Reading</a></li>
+<li><a href="http://insecure.org/sploits.html">Exploit World</a></li>
+-->
+<li><a href="http://insecure.org/advertising.html">Sponsors:</a>
+  <br><br>
+  
+<!-- Begin Sidebar Banner Code -->
+<A HREF="http://www.acunetix.com/free-network-vulnerability-scan/?utm_source=insecure&utm_medium=box&utm_term=keys&utm_campaign=insecure"><IMG SRC="/shared/images/Acunetix/Acunetix-Keys-120x90.gif" BORDER=0 ALT="Acunetix"></A>
+<!-- End Sidebar Banner Code -->
+
+<BR><BR>
+
+<!-- Next Sidebar -->
+<!-- Begin Sidebar Banner Code -->
+<A HREF="http://www2.internap.com/MIROC-Ad-IS"><IMG SRC="/shared/images/internap/MIROC_Internap.jpg" BORDER=0 ALT="INTERNAP MIRO"></A>
+<!-- End Sidebar Banner Code -->
+
+<BR><BR>
+
+
+<!-- Begin Bottom (Google) Sidebar Banner Code -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- SidebarSkyScraper -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:120px;height:600px"
+     data-ad-client="ca-pub-0078565546631069"
+     data-ad-slot="9829251079"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- End Bottom (Google) Sidebar Banner Code -->
+
+</li>
+</ul>
+
+</TD>
+<TD BGCOLOR="#FFFFFF" VALIGN="top" ALIGN="left"><IMG
+SRC="/shared/images/topleftcurve.gif" alt="/"><TABLE CELLPADDING="4" WIDTH="100%" style="table-layout: fixed;"><TR><TD BGCOLOR="#FFFFFF">
+<div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">NSE Scripts</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="nse-library.html"><img src="/book-icons/prev.gif" alt="Prev"></a> </td><th width="60%" align="center">Chapter 9. Nmap Scripting Engine</th><td width="20%" align="right"> <a accesskey="n" href="nse-api.html"><img src="/book-icons/next.gif" alt="Next"></a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nse-scripts-list"></a>NSE Scripts</h2></div></div></div><a class="indexterm" name="id317760"></a><p>
+    This is a list of the scripts packaged with Nmap as of this writing.
+    This documentation comes straight from the source code of the
+    scripts thanks to the NSEDoc documentation system, described in
+    <a class="xref" href="nse-documentation.html" title="Script Documentation Writing">the section called “Script Documentation Writing”</a>.
+    
+    For the latest documentation see the online NSE documentation portal
+    at <a class="ulink" href="http://nmap.org/nsedoc/" target="_top">http://nmap.org/nsedoc/</a>.
+    </p><h5><a name="id317788"></a><code class="filename">ASN.nse</code> (AS Numbers)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+discovery, external.
+
+</p><p>
+Maps IP addresses to autonomous system (AS) numbers.
+</p><p>
+The script works by sending DNS TXT queries to a DNS server which in
+turn queries a third-party service provided by Team Cymru
+(team-cymru.org) using an in-addr.arpa style zone set up especially for
+use by Nmap.
+</p><p>
+The responses to these queries contain both Origin and Peer ASNs and
+their descriptions, displayed along with the BG Prefix and Country Code.
+</p><p>
+The script caches results to reduce the number of queries and should
+perform a single query for all scanned targets in a BG Prefix present in
+Team Cymru's database.
+</p><p>
+Be aware that any targets against which this script is run will be sent
+to and potentially recorded by one or more DNS servers and Team Cymru.
+In addition your IP address will be sent along with the ASN to a DNS
+server (your default DNS server, or whichever you specified with the
+<code class="literal">dns</code> script argument).</p><h6><a name="id317838"></a>Script Arguments</h6><div class="variablelist"><dl><dt><span class="term"><code class="varname">dns</code></span></dt><dd><p>
+The address of a recursive nameserver to use (optional).</p></dd></dl></div><h6><a name="id317861"></a>Usage</h6><pre class="screen">nmap --script ASN.nse [--script-args dns=&lt;DNS server&gt;] &lt;target&gt;</pre><h6><a name="id317873"></a>Sample Output</h6><pre class="screen">Host script results:
+|  AS Numbers:
+|  BGP: 64.13.128.0/21 | Country: US
+|    Origin AS: 10565 SVCOLO-AS - Silicon Valley Colocation, Inc.
+|      Peer AS: 3561 6461
+|  BGP: 64.13.128.0/18 | Country: US
+|    Origin AS: 10565 SVCOLO-AS - Silicon Valley Colocation, Inc.
+|_     Peer AS: 174 2914 6461</pre><h5><a name="id317887"></a><code class="filename">HTTPAuth.nse</code> (HTTP Auth)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, auth, intrusive.
+
+</p><p>
+Gets the authentication scheme and realm of a web service that requires
+authentication.</p><h6><a name="id317911"></a>Sample Output</h6><pre class="screen">|  HTTP Auth: HTTP Service requires authentication
+|_   Auth type: Basic, realm = DSL Router</pre><h5><a name="id317923"></a><code class="filename">HTTP_open_proxy.nse</code> (Open Proxy Test)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, discovery, external, intrusive.
+
+</p><p>
+Checks if an HTTP proxy is open.
+</p><p>
+The script attempts to connect to www.google.com through the proxy and checks
+for a <code class="literal">Server: gws</code> header field in the response.
+</p><p>
+If the target is an open proxy, this script will cause the target to retrieve a
+web page from www.google.com.</p><h5><a name="id317961"></a><code class="filename">HTTPpasswd.nse</code> (HTTP directory traversal passwd probe)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+intrusive, vuln.
+
+</p><p>
+Checks if a web server is vulnerable to directory traversal by attempting to
+retrieve /etc/passwd.</p><h5><a name="id317985"></a><code class="filename">HTTPtrace.nse</code> (HTTP TRACE)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+discovery.
+
+</p><p>
+Sends an HTTP TRACE request and shows header fields that were modified in the
+response.</p><h6><a name="id318009"></a>Sample Output</h6><pre class="screen">80/tcp open  http
+|  HTTP TRACE: Response differs from request.  First 5 additional lines:
+|  Cookie: UID=d4287aa38d02f409841b4e0c0050c13148a85d01c0c0a154d4ef56dfc2b4fc1b0
+|  Country: us
+|  Ip_is_advertise_combined: yes
+|  Ip_conntype-Confidence: -1
+|_ Ip_line_speed: medium</pre><h5><a name="id318022"></a><code class="filename">MSSQLm.nse</code> (MS SQL)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, discovery, intrusive.
+
+</p><p>
+Attempts to extract information from Microsoft SQL Server.</p><h5><a name="id318046"></a><code class="filename">MySQLinfo.nse</code> (MySQL Server Information)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, discovery, safe.
+
+</p><p>
+Connects to a MySQL server and prints information such as the protocol and
+version numbers, thread ID, status, capabilities, and the password salt.
+</p><p>
+If service detection is performed and the server appears to be blocking
+our host or is blocked from too many connections, then we don't bother
+running this script (see the portrule).</p><h6><a name="id318075"></a>Sample Output</h6><pre class="screen">3306/tcp open  mysql
+|  MySQL Server Information: Protocol: 10
+|  Version: 5.0.51a-3ubuntu5.1
+|  Thread ID: 7
+|  Some Capabilities: Connect with DB, Compress, Transactions, Secure Connection
+|  Status: Autocommit
+|_ Salt: bYyt\NQ/4V6IN+*3`imj</pre><h5><a name="id318088"></a><code class="filename">PPTPversion.nse</code> (PPTP)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+version.
+
+</p><p>
+Attempts to extract system information from the PPTP service.</p><h5><a name="id318112"></a><code class="filename">RealVNC_auth_bypass.nse</code> (RealVNC Authentication Bypass)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, vuln.
+
+</p><p>
+Checks if a VNC server is vulnerable to the RealVNC authentication bypass
+(CVE-2006-2369).</p><h5><a name="id318136"></a><code class="filename">SMTP_openrelay_test.nse</code> (Open Relay SMTP)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+demo.
+
+</p><p>
+Checks if an SMTP server is an open relay.</p><h5><a name="id318159"></a><code class="filename">SMTPcommands.nse</code> (SMTPcommands)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, discovery, safe.
+
+</p><p>
+Attempts to use EHLO and HELP to gather the Extended commands supported by an
+SMTP server.</p><h6><a name="id318183"></a>Sample Output</h6><pre class="screen">25/tcp	open	smtp
+|  SMTPcommands: EHLO uninvited.example.net Hello root at localhost [127.0.0.1], SIZE 52428800, PIPELINING, 250 HELP
+|_ HELP Commands supported:, , AUTH HELO EHLO MAIL RCPT DATA NOOP QUIT RSET HELP</pre><h5><a name="id318196"></a><code class="filename">SNMPcommunitybrute.nse</code> (SNMPv1-communitybrute)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+intrusive, auth.
+
+</p><p>
+Attempts to find an SNMP community string by brute force.</p><h5><a name="id318220"></a><code class="filename">SNMPsysdescr.nse</code> (SNMPv1)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, discovery, safe.
+
+</p><p>
+Attempts to extract system information from an SNMP version 1 service.</p><h6><a name="id318243"></a>Sample Output</h6><pre class="screen">|  SNMPv1: HP ETHERNET MULTI-ENVIRONMENT,ROM A.25.80,JETDIRECT,JD117,EEPROM V.28.22,CIDATE 08/09/2006
+|_   System uptime: 28 days, 17:18:59 (248153900 timeticks)</pre><h5><a name="id318256"></a><code class="filename">SQLInject.nse</code> (sql-inject)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+intrusive, vuln.
+
+</p><p>
+Spiders an HTTP server looking for URLs containing queries vulnerable to an SQL
+injection attack.
+</p><p>
+The script spiders an HTTP server looking for URLs containing queries. It then
+proceeds to combine crafted SQL commands with susceptible URLs in order to
+obtain errors. The errors are analysed to see if the url is vulnerable to
+attack. This uses the most basic form of SQL injection but anything more
+complication is more suited to a stand alone tool. Both meta and HTTP redirects
+are supported.
+</p><p>
+It is not advisable to run this against unknown hosts.
+</p><p>
+We may not have access to the servers true hostname. This means we cannot
+access virtually hosted sites and cannot follow absolute links when the
+hostname is different from the resolved ip address</p><h5><a name="id318295"></a><code class="filename">SSH-hostkey.nse</code> (SSH Hostkey)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+safe, default, intrusive.
+
+</p><p>
+Shows SSH hostkeys.
+</p><p>
+Shows fingerprint or fingerprint and key depending on verbosity level. Puts the
+found hostkeys in nmap.registry for other scripts to use them. You can control
+the output with the <code class="literal">ssh_hostkey</code> script argument.</p><h6><a name="id318329"></a>Script Arguments</h6><div class="variablelist"><dl><dt><span class="term"><code class="varname">ssh_hostkey</code></span></dt><dd><p>
+Controls the output format of keys. Multiple values may be
+given, separated by spaces. Possible values are
+</p><div class="itemizedlist"><ul type="disc" compact><li><code class="literal">"full"</code>: The entire key, not just the fingerprint.
+</li><li><code class="literal">"bubble"</code>: Bubble Babble output,
+</li><li><code class="literal">"visual"</code>: Visual ASCII art representation.
+</li><li><code class="literal">"all"</code>: All of the above.</li></ul></div><p>
+</p></dd></dl></div><h6><a name="id318392"></a>Usage</h6><pre class="screen">nmap host --script SSH-hostkey --script-args ssh_hostkey=full
+nmap host --script SSH-hostkey --script-args ssh_hostkey=all
+nmap host --script SSH-hostkey --script-args ssh_hostkey='visual bubble'
+</pre><h6><a name="id318405"></a>Sample Output</h6><pre class="screen">22/tcp open  ssh
+|  SSH Hostkey: 2048 f0:58:ce:f4:aa:a4:59:1c:8e:dd:4d:07:44:c8:25:11 (RSA)
+22/tcp open  ssh
+|  SSH Hostkey: 2048 f0:58:ce:f4:aa:a4:59:1c:8e:dd:4d:07:44:c8:25:11 (RSA)
+|  +--[ RSA 2048]----+
+|  |       .E*+      |
+|  |        oo       |
+|  |      . o .      |
+|  |       O . .     |
+|  |      o S o .    |
+|  |     = o + .     |
+|  |    . * o .      |
+|  |     = .         |
+|  |    o .          |
+|_ +-----------------+
+22/tcp open  ssh
+|  SSH Hostkey: 2048 xuvah-degyp-nabus-zegah-hebur-nopig-bubig-difeg-hisym-rumef-cuxex (RSA)
+|_ ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAwVuv2gcr0maaKQ69VVIEv2ob4OxnuI64fkeOnCXD1lUx5tTA+vefXUWEMxgMuA7iX4irJHy2zer0NQ3Z3yJvr5scPgTYIaEOp5Uo/eGFG9Agpk5wE8CoF0e47iCAPHqzlmP2V7aNURLMODb3jVZuI07A2ZRrMGrD8d888E2ORVORv1rYeTYCqcMMoVFmX9l3gWEdk4yx3w5sD8v501Iuyd1v19mPfyhrI5E1E1nl/Xjp5N0/xP2GUBrdkDMxKaxqTPMie/f0dXBUPQQN697a5q+5lBRPhKYOtn6yQKCd9s1Q22nxn72Jmi1RzbMyYJ52FosDT755Qmb46GLrDMaZMQ==</pre><h5><a name="id318424"></a><code class="filename">SSHv1-support.nse</code> (SSH Protocol Version 1)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, safe.
+
+</p><p>
+Checks if an SSH server supports SSH Protocol Version 1.</p><h5><a name="id318447"></a><code class="filename">SSLv2-support.nse</code> (SSLv2)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, safe.
+
+</p><p>
+Determines whether the server (still) supports SSL-v2, and what ciphers it
+offers.</p><h6><a name="id318471"></a>Sample Output</h6><pre class="screen">443/tcp open   https   syn-ack
+|  SSLv2: server still supports SSLv2
+|       SSL2_RC4_128_WITH_MD5
+|       SSL2_DES_192_EDE3_CBC_WITH_MD5
+|       SSL2_RC2_CBC_128_CBC_WITH_MD5
+|       SSL2_DES_64_CBC_WITH_MD5
+|       SSL2_RC4_128_EXPORT40_WITH_MD5
+|_      SSL2_RC2_CBC_128_CBC_WITH_MD5</pre><h5><a name="id318485"></a><code class="filename">UPnP-info.nse</code> (UPnP)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, safe.
+
+</p><p>
+Attempts to extract system information from the UPnP service.</p><h6><a name="id318508"></a>Sample Output</h6><pre class="screen">|  UPnP:  System/1.0 UPnP/1.0 IGD/1.0
+|_ Location: http://192.168.1.1:80/UPnP/IGD.xml</pre><h5><a name="id318520"></a><code class="filename">anonFTP.nse</code> (Anonymous FTP)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, auth, intrusive.
+
+</p><p>
+Checks if an FTP server allows anonymous logins.</p><h6><a name="id318544"></a>Sample Output</h6><pre class="screen">|_ Anonymous FTP: Anonymous login allowed</pre><h5><a name="id318555"></a><code class="filename">brutePOP3.nse</code> (POP3 brute force)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+intrusive, auth.
+
+</p><p>
+Tries to log into a POP3 account by guessing usernames and passwords.</p><h5><a name="id318579"></a><code class="filename">bruteTelnet.nse</code> (bruteforce)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+auth, intrusive.
+
+</p><p>
+Tries to get Telnet login credentials by guessing usernames and passwords.</p><h5><a name="id318602"></a><code class="filename">daytimeTest.nse</code> (Daytime)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+discovery.
+
+</p><p>
+Retrieves the day and time from the UDP Daytime service.</p><h5><a name="id318626"></a><code class="filename">dns-safe-recursion-port.nse</code> (DNS source port randomness)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+external, intrusive.
+
+</p><p>
+Checks a DNS server for the predictable-port recursion vulnerability.
+Predictable source ports can make a DNS server vulnerable to cache poisoning
+attacks (CVE-2008-1447).
+</p><p>
+The script works by querying porttest.dns-oarc.net.
+Be aware that any targets against which this script is run will be sent to and
+potentially recorded by one or more DNS servers and the porttest server. In
+addition your IP address will be sent along with the porttest query to the DNS
+server running on the target.</p><h5><a name="id318657"></a><code class="filename">dns-safe-recursion-txid.nse</code> (DNS TXID randomness)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+external, intrusive.
+
+</p><p>
+Checks a DNS server for the predictable-TXID DNS recursion
+vulnerability.  Predictable TXID values can make a DNS server vulnerable to
+cache poisoning attacks (CVE-2008-1447).
+</p><p>
+The script works by querying txidtest.dns-oarc.net.
+Be aware that any targets against which this script is run will be sent to and
+potentially recorded by one or more DNS servers and the txidtest server. In
+addition your IP address will be sent along with the txidtest query to the DNS
+server running on the target.</p><h5><a name="id318687"></a><code class="filename">dns-test-open-recursion.nse</code> (Nameserver open recursive queries)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, intrusive.
+
+</p><p>
+Checks if a DNS server allows queries for third-party names.
+</p><p>
+It is expected that recursion will be enabled on your own internal nameservers.</p><h5><a name="id318715"></a><code class="filename">finger.nse</code> (Finger Results)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, discovery.
+
+</p><p>
+Attempts to get a list of usernames via the finger service.</p><h5><a name="id318738"></a><code class="filename">ftpbounce.nse</code> (FTP bounce check)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, intrusive.
+
+</p><p>
+Checks to see if an FTP server allows port scanning using the FTP bounce method.</p><h5><a name="id318762"></a><code class="filename">iax2Detect.nse</code> (IAX2 Service Detection)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+version.
+
+</p><p>
+Detects the UDP IAX2 service.
+</p><p>
+The script sends an IAX Control Frame POKE request and checks for a proper
+response.</p><h5><a name="id318789"></a><code class="filename">ircServerInfo.nse</code> (IRC Server Info)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, discovery.
+
+</p><p>
+Gathers information from an IRC server.
+</p><p>
+It uses STATS, LUSERS, and other queries to obtain this information.</p><h6><a name="id318817"></a>Sample Output</h6><pre class="screen">6665/tcp open     irc
+|  IRC Server Info: Server: foo.bar.net
+|  Version: hyperion-1.0.2b(381). foo.bar.net 
+|  Lservers/Lusers: 0/4204
+|  Uptime: 106 days, 2:46:30
+|  Source host: bar.foo.net
+|_ Source ident: OK n=nmap</pre><h5><a name="id318830"></a><code class="filename">ircZombieTest.nse</code> (IRC zombie)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+malware.
+
+</p><p>
+Checks for an IRC zombie.
+</p><p>
+If port 113 responds before we ask it then something is fishy. Usually this
+means that the host is an IRC zombie.</p><h5><a name="id318857"></a><code class="filename">nbstat.nse</code> (NBSTAT)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, discovery, safe.
+
+</p><p>
+Attempt's to get the target's NetBIOS names and MAC address.
+</p><p>
+By default, the script displays the name of the computer and the logged-in
+user; if the verbosity is turned up, it displays all names the system thinks it
+owns.
+</p><p>
+For more information on the NetBIOS protocol, see 'nselib/netbios.lua'.</p><h6><a name="id318890"></a>Usage</h6><pre class="screen">sudo nmap -sU --script nbstat.nse -p137 &lt;host&gt;
+</pre><h6><a name="id318902"></a>Sample Output</h6><pre class="screen">(no verbose)
+|_ NBSTAT: NetBIOS name: TEST1, NetBIOS user: RON, NetBIOS MAC: 00:0c:29:f9:d9:28
+
+(verbose)
+|  NBSTAT: NetBIOS name: TEST1, NetBIOS user: RON, NetBIOS MAC: 00:0c:29:f9:d9:28
+|  Name: TEST1&lt;00&gt;            Flags: &lt;unique&gt;&lt;active&gt;
+|  Name: TEST1&lt;20&gt;            Flags: &lt;unique&gt;&lt;active&gt;
+|  Name: WORKGROUP&lt;00&gt;        Flags: &lt;group&gt;&lt;active&gt;
+|  Name: TEST1&lt;03&gt;            Flags: &lt;unique&gt;&lt;active&gt;
+|  Name: WORKGROUP&lt;1e&gt;        Flags: &lt;group&gt;&lt;active&gt;
+|  Name: RON&lt;03&gt;              Flags: &lt;unique&gt;&lt;active&gt;
+|  Name: WORKGROUP&lt;1d&gt;        Flags: &lt;unique&gt;&lt;active&gt;
+|_ Name: \x01\x02__MSBROWSE__\x02&lt;01&gt;  Flags: &lt;group&gt;&lt;active&gt;</pre><h5><a name="id318920"></a><code class="filename">popcapa.nse</code> (POP3 Capabilites)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default.
+
+</p><p>
+Retrieves POP3 server capabilities.</p><h5><a name="id318943"></a><code class="filename">promiscuous.nse</code> (Promiscuous detection)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+discovery.
+
+</p><p>
+Checks if a target on a local Ethernet has its network card in promiscuous mode.
+</p><p>
+The technique is described at
+<a class="ulink" href="http://www.securityfriday.com/promiscuous_detection_01.pdf" target="_top">http://www.securityfriday.com/promiscuous_detection_01.pdf</a>.</p><h5><a name="id318975"></a><code class="filename">ripeQuery.nse</code> (RIPE query)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+discovery, external.
+
+</p><p>
+Connects to the RIPE database and displays the <code class="literal">role:</code> entry for the
+target's IP address.
+</p><p>
+This script uses an external database. Your IP address and the IP address of
+the target will be sent to whois.ripe.net.</p><h5><a name="id319009"></a><code class="filename">robots.nse</code> (robots.txt)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, safe.
+
+</p><p>
+Checks for disallowed entries in <code class="literal">robots.txt</code>.
+</p><p>
+The higher the verbosity or debug level, the more disallowed entries are shown.</p><h6><a name="id319042"></a>Sample Output</h6><pre class="screen">80/tcp  open   http    syn-ack
+|  robots.txt: has 156 disallowed entries (40 shown)
+|  /news?output=xhtml&amp; /search /groups /images /catalogs
+|  /catalogues /news /nwshp /news?btcid=*&amp; /news?btaid=*&amp;
+|  /setnewsprefs? /index.html? /? /addurl/image? /pagead/ /relpage/
+|  /relcontent /sorry/ /imgres /keyword/ /u/ /univ/ /cobrand /custom
+|  /advanced_group_search /googlesite /preferences /setprefs /swr /url /default
+|  /m? /m/? /m/lcb /m/news? /m/setnewsprefs? /m/search? /wml?
+|_ /wml/? /wml/search?</pre><h5><a name="id319062"></a><code class="filename">rpcinfo.nse</code> (rpcinfo)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, safe, discovery.
+
+</p><p>
+Connects to portmapper and fetches a list of all registered programs.</p><h6><a name="id319086"></a>Sample Output</h6><pre class="screen">111/tcp open  rpcbind
+|  rpcinfo:
+|  100000  2        111/udp  rpcbind
+|  100005  1,2,3    705/udp  mountd
+|  100003  2,3,4   2049/udp  nfs
+|  100024  1      32769/udp  status
+|  100021  1,3,4  32769/udp  nlockmgr
+|  100000  2        111/tcp  rpcbind
+|  100005  1,2,3    706/tcp  mountd
+|  100003  2,3,4   2049/tcp  nfs
+|  100024  1      50468/tcp  status
+|_ 100021  1,3,4  50468/tcp  nlockmgr</pre><h5><a name="id319100"></a><code class="filename">showHTMLTitle.nse</code> (HTML title)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, safe.
+
+</p><p>
+Shows the title of the default page of a web server.
+</p><p>
+The script will follow no more than one HTTP redirect, and only if the
+redirection leads to the same host. The script may send a DNS query to
+determine if the host the redirect leads to has the same IP address as the
+original target.</p><h6><a name="id319129"></a>Sample Output</h6><pre class="screen">80/tcp  open   http    syn-ack
+|_ HTML title: Foo.</pre><h5><a name="id319141"></a><code class="filename">showOwner.nse</code> (Service owner)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, safe.
+
+</p><p>
+Attempts to find the owner of a scanned port.
+</p><p>
+The script makes a connection to the auth port (113) and queries the owner of
+an open port.</p><h5><a name="id319168"></a><code class="filename">showSSHVersion.nse</code> (Stealth SSH version)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+demo.
+
+</p><p>
+Connects to an SSH server and retrieves the version banner.
+</p><p>
+This typically does not result in any logs of the connection being made.</p><h6><a name="id319196"></a>Sample Output</h6><pre class="screen">22/tcp  open   ssh
+|_ Stealth SSH version: SSH-2.0-OpenSSH_3.9p1</pre><h5><a name="id319208"></a><code class="filename">skype_v2-version.nse</code> (Skype v2)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+version.
+
+</p><p>
+Detects the Skype version 2 service.</p><h5><a name="id319231"></a><code class="filename">smb-enumdomains.nse</code> (MSRPC: List of domains)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+discovery, intrusive.
+
+</p><p>
+Attempts to enumerate domains on a system, along with their policies. This will
+likely only work without credentials against Windows 2000.
+</p><p>
+After the initial bind() to SAMR, the sequence of calls is:<br>
+Connect4() -- get a connect_handle<br>
+EnumDomains() -- get a list of the domains (stop here if you just want the names)<br>
+QueryDomain() -- get the sid for the domain<br>
+OpenDomain() -- get a handle for each domain<br>
+QueryDomainInfo2() -- get the domain information<br>
+</p><h6><a name="id319275"></a>Usage</h6><pre class="screen">nmap --script smb-enumdomains.nse -p445 &lt;host&gt;
+sudo nmap -sU -sS --script smb-enumdomains.nse -p U:137,T:139 &lt;host&gt;
+</pre><h6><a name="id319288"></a>Sample Output</h6><pre class="screen">Host script results:
+|  MSRPC: List of domains:
+|  Domain: TEST1
+|   |_ SID: S-1-5-21-1060284298-842925246-839522115
+|   |_ Users: Administrator, ASPNET, Guest, Ron, test
+|   |_ Creation time: 2006-10-17 15:35:07
+|   |_ Min password length: 0 characters
+|   |_ Max password age: 10675199 days
+|   |_ Min password age: 0 days
+|   |_ Password history length: 0 passwords
+|   |_ Lockout threshold: 0 login attempts
+|   |_ Lockout duration: 60 minutes
+|   |_ Lockout window: 60 minutes
+|   |_ Password properties: 
+|     |_  Password complexity requirements do not exist
+|_    |_  Administrator account cannot be locked out
+</pre><h5><a name="id319305"></a><code class="filename">smb-enumshares.nse</code> (MSRPC: NetShareEnumAll())</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+discovery, intrusive.
+
+</p><p>
+Attempts to list shares using the srvsvc.NetShareEnumAll() MSRPC function. This
+will likely only work anonymously against Windows 2000.
+</p><p>
+There isn't a whole lot to say about this one. The sequence of calls after
+the initial bind() is:<br>
+NetShareEnumAll()
+</p><p>
+Since NetShareEnumAll() only works anonymously, if it fails this will check
+a handful of common shares.
+</p><p>
+Once it has a list of shares, whether it was pulled over MSRPC or guessed, 
+we attempt to connect to each of them with a standard smb tree_connect request
+over a null session. We record which ones succeeded and failed (that is, which
+shares allowed for anonymous access).</p><h6><a name="id319346"></a>Usage</h6><pre class="screen">nmap --script smb-enumshares.nse -p445 &lt;host&gt;
+sudo nmap -sU -sS --script smb-enumshares.nse -p U:137,T:139 &lt;host&gt;
+</pre><h5><a name="id319359"></a><code class="filename">smb-enumusers.nse</code> (MSRPC: List of user accounts)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+discovery, intrusive.
+
+</p><p>
+Attempts to enumerate the users on a remote Windows system, with as much
+information as possible, through a variety of techniques (over SMB + MSRPC,
+which uses port 445 or 139).
+</p><p>
+Will first attempt to call the QueryDisplayInfo() MSRPC function. If NULL
+sessions are enabled, this will succeed and pull back a detailed list of users.
+Unfortunately, this likely won't succeed unless we're scanning Windows 2000.
+When this test is performed, the following MSRPC functions are called:<br>
+Bind() -- bind to the SAMR service<br>
+Connect4() -- get a connect_handle<br>
+EnumDomains() -- get a list of the domains<br>
+QueryDomain() -- get the sid for the domain<br>
+OpenDomain() -- get a handle for each domain<br>
+QueryDisplayInfo() -- get the list of users in the domain<br>
+Close() -- Close the domain handle<br>
+Close() -- Close the connect handle
+</p><p>
+Credit goes out to the enum.exe program, the code I wrote for this is largely
+due to packetlogs I took of its operations.
+</p><p>
+Regardless of whether or not this succeeds, a second technique is used to pull
+user accounts. This one is apparently successful against more machines,
+although I haven't found a machine that this only works against. However, I did
+find that this will turn up more users for certain systems (although I haven't
+figured out why).
+</p><p>
+Each user on a Windows system has an RID. The RID of 500 is the Administrator
+account (even if it's renamed), 501 is the Guest account, and 1000+ are the
+user accounts. This technique, which was originally used in the
+sid2user/user2sid programs, will attempt to convert common RID numbers to names
+to discover users.
+</p><p>
+First, the SID of the server has to be determined. This is done by looking up
+any name present on the server using a technique like user2sid. For this code,
+we try and convert as many names as we can find -- all we need is one valid
+name for this to succeed. In this code, I use:<br>
+- The computer name / domain name, returned in SMB_COM_NEGOTIATE<br>
+- An nbstat query to get the server name and the currently loggeed in user<br>
+- Some common names ("administrator", "guest", and "test")
+</p><p>
+In theory, the computer name should be sufficient for this to always work, and
+the rest of the names are in there for good measure.
+</p><p>
+Once that's completed, the RIDs 500 - 505 are requested, and any responses are
+displayed. Then, starting at 1000, we take small groups of RIDs which are
+requestd. I break them into smaller groups because if too many are requested at
+once, we get a STATUS_BUFFER_OVERFLOW error. We try every RID up to 1100, then,
+as soon as we get an empty group (5 RIDs in a row without a result), we stop.
+</p><p>
+It might be a good idea to modify this, in the future, with some more
+intelligence. For example, have it run until it get 5 groups in a row with no
+results instead of going up to 1100. I performed a test on an old server we
+have here with a lot of accounts, and I got these results: 500, 501, 1000,
+1030, 1031, 1053, 1054, 1055, 1056, 1057, 1058, 1059, 1060, 1061, 1062, 1063,
+1064, 1065, 1066, 1067, 1070, 1075, 1081, 1088, 1090. The jump from 1000 to
+1030 is quite large and can easily result in missing accounts.
+</p><p>
+The disadvantage of using the user2sid/sid2user technique is that less
+information is returned about the user.
+</p><p>
+The names and details from both of these techniques are merged and displayed.
+If the output is verbose, then as many details as possible are displayed,
+otherwise only the list of usernames are displayed. The names are ordered
+alphabetically.</p><h6><a name="id319474"></a>Usage</h6><pre class="screen">nmap --script smb-enumusers.nse -p445 &lt;host&gt;
+sudo nmap -sU -sS --script smb-enumusers.nse -p U:137,T:139 &lt;host&gt;
+</pre><h5><a name="id319488"></a><code class="filename">smb-os-discovery.nse</code> (OS from SMB)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, discovery, safe.
+
+</p><p>
+Attempts to determine the operating system over the SMB protocol (ports 445 and
+139). 
+</p><p>
+See nselib/smb.lua for more information on this protocol.</p><h6><a name="id319516"></a>Usage</h6><pre class="screen">nmap --script smb-os-discovery.nse -p445 127.0.0.1
+sudo nmap -sU -sS --script smb-os-discovery.nse -p U:137,T:139 127.0.0.1
+</pre><h6><a name="id319528"></a>Sample Output</h6><pre class="screen">|  OS from SMB: Windows 2000
+|  LAN Manager: Windows 2000 LAN Manager
+|  Name: WORKGROUP\TEST1
+|_ System time: 2008-09-09 20:55:55 UTC-5
+
+</pre><h5><a name="id319541"></a><code class="filename">smb-security-mode.nse</code> (SMB Security)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+discovery, safe.
+
+</p><p>
+Returns information about the SMB security level determined by SMB.
+</p><p>
+Here is how to interpret the output:
+</p><p>
+User-level security: Each user has a separate username/password that is used
+to log into the system. This is the default setup of pretty much everything
+these days.<br>
+Share-level security: The anonymous account should be used to log in, then 
+the password is given (in plaintext) when a share is accessed. All users who
+have access to the share use this password. This was the original way of doing
+things, but isn't commonly seen, now. If a server uses share-level security, 
+it is vulnerable to sniffing.
+</p><p>
+Challenge/response passwords: If enabled, the server can accept any type of
+password:<br>
+</p><div class="itemizedlist"><ul type="disc" compact><li>Plaintext
+</li><li>LM and NTLM
+</li><li>LMv2 and NTLMv2
+</li></ul></div><p>
+If it isn't set, the server can only accept plaintext passwords. Most servers
+are configured to use challenge/response these days. If a server is configured
+to accept plaintext passwords, it is vulnerable to sniffing.
+</p><p>
+Message signing: If required, all messages between the client and server must
+sign be signed by a shared key, derived from the password and the server
+challenge. If supported and not required, message signing is negotiated between
+clients and servers and used if both support and request it. By default,
+Windows clients don't sign messages, so if message signing isn't required by
+the server, messages probably won't be signed; additionally, if performing a
+man-in-the-middle attack, an attacker can negotiate no message signing. If
+message signing isn't required, the server is vulnerable to man-in-the-middle
+attacks.
+</p><p>
+See nselib/smb.lua for more information on the protocol itself.<br>
+</p><h6><a name="id319616"></a>Usage</h6><pre class="screen">nmap --script smb-security-mode.nse -p445 127.0.0.1
+sudo nmap -sU -sS --script smb-security-mode.nse -p U:137,T:139 127.0.0.1
+</pre><h6><a name="id319628"></a>Sample Output</h6><pre class="screen">|  SMB Security: User-level authentication
+|  SMB Security: Challenge/response passwords supported
+|_ SMB Security: Message signing supported
+
+</pre><h5><a name="id319641"></a><code class="filename">strangeSMTPport.nse</code> (Unexpected SMTP)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+malware.
+
+</p><p>
+Checks if SMTP is running on a non-standard port.
+</p><p>
+This usually indicates crackers or script kiddies have set up a backdoor on the
+system to send spam or control your machine.</p><h6><a name="id319669"></a>Sample Output</h6><pre class="screen">22/tcp  open   ssh
+|_ Warning: smtp is running on a strange port.</pre><h5><a name="id319681"></a><code class="filename">whois.nse</code> (Whois)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+discovery, external, safe.
+
+</p><p>
+Queries the WHOIS services of Regional Internet Registries (RIR) and attempts to retrieve information about the IP Address
+Assignment which contains the Target IP Address.
+</p><p>
+The fields displayed contain information about the assignment and the organisation responsible for managing the address
+space. When output verbosity is requested on the Nmap command line (<code class="literal">-v</code>) extra information about the assignment will
+be displayed.
+</p><p>
+To determine which of the RIRs to query for a given Target IP Address this script utilises Assignments Data hosted by IANA.
+The data is cached locally and then parsed for use as a lookup table.  The locally cached files are refreshed periodically
+to help ensure the data is current.  If, for any reason, these files are not available to the script then a default sequence
+of Whois services are queried in turn until: the desired record is found; or a referral to another (defined) Whois service is
+found; or until the sequence is exhausted without finding either a referral or the desired record.
+</p><p>
+The script will recognise a referral to another Whois service if that service is defined in the script and will continue by
+sending a query to the referred service.  A record is assumed to be the desired one if it does not contain a referral.
+</p><p>
+To reduce the number unecessary queries sent to Whois services a record cache is employed and the entries in the cache can be
+applied to any targets within the range of addresses represented in the record.
+</p><p>
+In certain circumstances, the ability to cache responses prevents the discovery of other, smaller IP address assignments
+applicable to the target because a cached response is accepted in preference to sending a Whois query.  When it is important
+to ensure that the most accurate information about the IP address assignment is retrieved the script argument <code class="literal">whodb</code>
+should be used with a value of <code class="literal">"nocache"</code> (see script arguments).  This reduces the range of addresses that may use a
+cached record to a size that helps ensure that smaller assignments will be discovered.  This option should be used with caution
+due to the potential to send large numbers of whois queries and possibly be banned from using the services.
+</p><p>
+In using this script your IP address will be sent to iana.org. Additionally
+your address and the address of the target of the scan will be sent to one of
+the RIRs.</p><h6><a name="id319760"></a>Script Arguments</h6><div class="variablelist"><dl><dt><span class="term"><code class="varname">whodb</code></span></dt><dd><p>
+Takes any of the the following values, which may be combined:
+</p><div class="itemizedlist"><ul type="disc" compact><li><code class="literal">whodb=nofile</code> Prevent the use of IANA assignments data and instead query the default services.
+</li><li><code class="literal">whodb=nofollow</code> Ignore referrals and instead display the first record obtained.
+</li><li><code class="literal">whodb=nocache</code> Prevent the acceptance of records in the cache when they apply to large ranges of addresses.
+</li><li><code class="literal">whodb=[service-ids]</code> Redefine the default services to query.  Implies <code class="literal">nofile</code>.</li></ul></div><p>
+</p></dd></dl></div><h6><a name="id319830"></a>Usage</h6><pre class="screen"># Basic usage:
+nmap target --script whois
+
+# To prevent the use of IANA assignments data supply the nofile value
+# to the whodb argument:
+nmap target --script whois --script-args whodb=nofile
+nmap target --script whois --script-args whois={whodb=nofile}
+
+# Supplying a sequence of whois services will also prevent the use of
+# IANA assignments data and override the default sequence:
+nmap target --script whois --script-args whodb=arin+ripe+afrinic
+nmap target --script whois --script-args whois={whodb=apnic*lacnic}
+# The order in which the services are supplied is the order in which
+# they will be queried. (N.B. commas or semi-colons should not be
+# used to delimit argument values.)
+
+# To return the first record obtained even if it contains a referral
+# to another service, supply the nofollow value to whodb:
+nmap target --script whois --script-args whodb=nofollow
+nmap target --script whois --script-args whois={whodb=nofollow+ripe}
+# Note that only one service (the first one supplied) will be used in
+# conjunction with nofollow.
+
+# To ensure discovery of smaller assignments even if larger ones
+# exist in the cache, supply the nocache value to whodb:
+nmap target --script whois --script-args whodb=nocache
+nmap target --script whois --script-args whois={whodb=nocache}</pre><h6><a name="id319852"></a>Sample Output</h6><pre class="screen">Host script results:
+|  Whois: Record found at whois.arin.net
+|  netrange: 64.13.134.0 - 64.13.134.63
+|  netname: NET-64-13-143-0-26
+|  orgname: Titan Networks
+|  orgid: INSEC
+|_ country: US stateprov: CA</pre><h5><a name="id319865"></a><code class="filename">xamppDefaultPass.nse</code> (XAMPP default pwd)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+auth, vuln.
+
+</p><p>
+Check if an XAMP or XAMPP FTP server uses a default username and password.
+</p><p>
+XAMP is an Apache distribution designed for easy installation and
+administration.</p><h6><a name="id319892"></a>Sample Output</h6><pre class="screen">21/tcp  open   ftp
+|_ Login success with u/p: nobody/xampp</pre><h5><a name="id319904"></a><code class="filename">zoneTrans.nse</code> (zone-transfer)</h5><p>
+<span class="bold"><strong>Categories:</strong></span>
+
+default, intrusive, discovery.
+
+</p><p>
+Requests a zone transfer (AXFR) from a DNS server.
+</p><p>
+The script sends an AXFR query to a DNS server. The domain to query is
+determined by examining the name given on the command line, the DNS
+server's hostname, or it can be specified with the
+<code class="literal">zoneTrans.domain</code> script argument. If the query is
+successful all domains and domain types are returned along with common
+type specific data (SOA/MX/NS/PTR/A).
+</p><p>
+If we don't have the "true" hostname for the DNS server we cannot
+determine a likely zone to perform the transfer on.
+</p><p>
+Useful resources
+</p><div class="itemizedlist"><ul type="disc" compact><li>DNS for rocket scientists: <a class="ulink" href="http://www.zytrax.com/books/dns" target="_top">http://www.zytrax.com/books/dns</a>/
+</li><li>How the AXFR protocol works: <a class="ulink" href="http://cr.yp.to/djbdns/axfr-notes.html" target="_top">http://cr.yp.to/djbdns/axfr-notes.html</a></li></ul></div><p>
+</p><h6><a name="id319968"></a>Script Arguments</h6><div class="variablelist"><dl><dt><span class="term"><code class="varname">zoneTrans.domain</code></span></dt><dd><p>
+Domain to transfer.</p></dd></dl></div><h6><a name="id319992"></a>Sample Output</h6><pre class="screen">53/tcp   open     domain
+|  zone-transfer:
+|  foo.com.            SOA     ns2.foo.com. piou.foo.com.
+|  foo.com.            TXT  
+|  foo.com.            NS      ns1.foo.com.               
+|  foo.com.            NS      ns2.foo.com.               
+|  foo.com.            NS      ns3.foo.com.               
+|  foo.com.            A       127.0.0.1                  
+|  foo.com.            MX      mail.foo.com.              
+|  anansie.foo.com.    A       127.0.0.2                  
+|  dhalgren.foo.com.   A       127.0.0.3                  
+|  drupal.foo.com.     CNAME
+|  goodman.foo.com.    A       127.0.0.4 i                
+|  goodman.foo.com.    MX      mail.foo.com.              
+|  isaac.foo.com.      A       127.0.0.5                  
+|  julie.foo.com.      A       127.0.0.6                  
+|  mail.foo.com.       A       127.0.0.7                  
+|  ns1.foo.com.        A       127.0.0.7                  
+|  ns2.foo.com.        A       127.0.0.8                  
+|  ns3.foo.com.        A       127.0.0.9                  
+|  stubing.foo.com.    A       127.0.0.10                 
+|  vicki.foo.com.      A       127.0.0.11                 
+|  votetrust.foo.com.  CNAME
+|  www.foo.com.        CNAME
+|_ foo.com.            SOA     ns2.foo.com. piou.foo.com.</pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="nse-library.html"><img src="/book-icons/prev.gif" alt="Prev"></a> </td><td width="20%" align="center"><a accesskey="u" href="nse.html"><img src="/book-icons/up.gif" alt="Up"></a></td><td width="40%" align="right"> <a accesskey="n" href="nse-api.html"><img src="/book-icons/next.gif" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Lua Extensions </td><td width="20%" align="center"><a accesskey="h" href="toc.html"><img src="/book-icons/home.gif" alt="Home"></a></td><td width="40%" align="right" valign="top"> Nmap API</td></tr></table></div></TD></TR>
+</TABLE>
+</TD></TR>
+<TR><TD></TD><TD ALIGN="center">
+<FONT COLOR="#FFFFFF">
+[ <A HREF="//nmap.org"><FONT COLOR="#FFFFFF">Nmap</FONT></A> |
+  <A HREF="http://sectools.org"><FONT COLOR="#FFFFFF">Sec Tools</FONT></A> |
+  <A HREF="http://seclists.org/"><FONT COLOR="#FFFFFF">Mailing Lists</FONT></A> |
+  <A HREF="http://insecure.org/"><FONT COLOR="#FFFFFF">Site News</FONT></A> |
+  <A HREF="http://insecure.org/fyodor/"><FONT COLOR="#FFFFFF">About/Contact</FONT></A> |
+  <A HREF="http://insecure.org/advertising.html"><FONT COLOR="#FFFFFF">Advertising</FONT></A> |
+  <A HREF="http://insecure.org/privacy.html"><FONT COLOR="#FFFFFF">Privacy</FONT></A> ]<BR>
+</FONT>
+
+<!-- SiteSearch Google -->
+<div class="gcse-searchbox-only" data-resultsUrl="https://nmap.org/search.html"></div>
+<!-- End SiteSearch Google -->
+
+<!-- Bottom Banner -->
+<!-- Modified random image selection code - original version at
+     http://www.bravenet.com/reviews/archives/tips.php?view=8 -->
+<SCRIPT LANGUAGE="JavaScript" type="text/javascript">
+<!--
+var imagenumber = 2;
+var randomnumber = Math.random() ;
+var rand1 = Math.round( (imagenumber-1) * randomnumber) + 1 ;
+images = new Array
+images[1] = "/shared/images/netsparker/hack-website-first3.jpg"
+images[2] = "/shared/images/netsparker/netsparker-cloud2.png"
+
+links = new Array
+links[1] = "https://www.netsparker.com/web-vulnerability-scanner/?utm_source=scan4xsql&utm_medium=banner&utm_campaign=insecureorg"
+links[2] = "https://www.netsparker.com/online-web-application-security-scanner/?utm_source=easyauto&utm_medium=banner&utm_campaign=insecureorgnc"
+
+var myimage = images[rand1]
+var mylink = links[rand1]
+document.write('<A HREF="' + mylink + '"><IMG src="' + myimage + '" BORDER=0 ALT="Netsparker" WIDTH=728 HEIGHT=90><\/A>')
+//  -->
+</SCRIPT>
+<NOSCRIPT>
+<a href="https://www.netsparker.com/web-vulnerability-scanner/?utm_source=scan4xsql&utm_medium=banner&utm_campaign=insecureorg"><img width=728 height=90 border=0 src="/shared/images/netsparker/hack-website-first3.jpg" alt="Netsparker"></a>
+</NOSCRIPT>
+<!-- End Bottom Banner -->
+</TD></TR>
+</TABLE>
+</BODY>
+</HTML>
+
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1163px" height="197px" viewBox="0 0 1163 197" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.1 (12002) - http://www.bohemiancoding.com/sketch -->
+    <title>mockup</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="cloud" sketch:type="MSLayerGroup" transform="translate(0.000000, 45.000000)" fill="#FFFFFF">
+            <ellipse id="Oval-1" sketch:type="MSShapeGroup" cx="53" cy="79.5" rx="53" ry="46.5"></ellipse>
+            <ellipse id="Oval-1-Copy-4" sketch:type="MSShapeGroup" cx="208" cy="79.5" rx="46" ry="36.5"></ellipse>
+            <ellipse id="Oval-1-Copy" sketch:type="MSShapeGroup" cx="113.5" cy="53" rx="66.5" ry="53"></ellipse>
+            <ellipse id="Oval-1-Copy-2" sketch:type="MSShapeGroup" cx="167" cy="79.5" rx="53" ry="59.5"></ellipse>
+            <ellipse id="Oval-1-Copy-3" sketch:type="MSShapeGroup" cx="113.5" cy="92.5" rx="71.5" ry="59.5"></ellipse>
+        </g>
+        <g id="cloud-copy" sketch:type="MSLayerGroup" transform="translate(778.000000, 27.000000)" fill="#FFFFFF">
+            <ellipse id="Oval-1" sketch:type="MSShapeGroup" cx="53" cy="93.5" rx="53" ry="46.5"></ellipse>
+            <ellipse id="Oval-1-Copy-4" sketch:type="MSShapeGroup" cx="87" cy="57.5" rx="46" ry="36.5"></ellipse>
+            <ellipse id="Oval-1-Copy" sketch:type="MSShapeGroup" cx="153.5" cy="53" rx="66.5" ry="53"></ellipse>
+            <ellipse id="Oval-1-Copy-2" sketch:type="MSShapeGroup" cx="180.5" cy="87" rx="66.5" ry="53"></ellipse>
+            <ellipse id="Oval-1-Copy-3" sketch:type="MSShapeGroup" cx="115" cy="107.5" rx="53" ry="46.5"></ellipse>
+        </g>
+        <g id="cloud-copy-2" sketch:type="MSLayerGroup" transform="translate(373.000000, 11.000000)" fill="#FFFFFF">
+            <ellipse id="Oval-1" sketch:type="MSShapeGroup" cx="53" cy="72.5" rx="53" ry="46.5"></ellipse>
+            <ellipse id="Oval-1-Copy-4" sketch:type="MSShapeGroup" cx="127" cy="119.5" rx="46" ry="36.5"></ellipse>
+            <ellipse id="Oval-1-Copy" sketch:type="MSShapeGroup" cx="172.5" cy="93" rx="66.5" ry="53"></ellipse>
+            <ellipse id="Oval-1-Copy-2" sketch:type="MSShapeGroup" cx="153.5" cy="53" rx="66.5" ry="53"></ellipse>
+            <ellipse id="Oval-1-Copy-5" sketch:type="MSShapeGroup" cx="153.5" cy="53" rx="66.5" ry="53"></ellipse>
+            <ellipse id="Oval-1-Copy-3" sketch:type="MSShapeGroup" cx="80" cy="99.5" rx="53" ry="46.5"></ellipse>
+        </g>
+    </g>
+</svg>
